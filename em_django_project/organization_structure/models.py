@@ -1,11 +1,9 @@
 from django.db import models
-
 from registration.models import Company, User
 
 
 class Department(models.Model):
     name = models.CharField(max_length=100)
-
     manager = models.OneToOneField(
         User,
         on_delete=models.SET_NULL,
@@ -13,14 +11,19 @@ class Department(models.Model):
         blank=True,
         related_name="managed_department",
     )
-
     parent = models.ForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
-
     company = models.ForeignKey(
         Company, related_name="departments", on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Подразделение"
+        verbose_name_plural = "Подразделения"
 
 
 class Position(models.Model):
@@ -28,6 +31,13 @@ class Position(models.Model):
     department = models.ForeignKey(
         Department, related_name="positions", on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Должность"
+        verbose_name_plural = "Должности"
 
 
 class Employee(models.Model):
@@ -47,3 +57,10 @@ class Employee(models.Model):
         blank=True,
         related_name="subordinates",
     )
+
+    def __str__(self):
+        return str(self.user)
+
+    class Meta:
+        verbose_name = "Сотрудник"
+        verbose_name_plural = "Сотрудники"

@@ -1,5 +1,4 @@
 from django.db import models
-
 from registration.models import User
 
 
@@ -22,3 +21,10 @@ class Task(models.Model):
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     estimated_time = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Задача"
+        verbose_name_plural = "Задачи"
